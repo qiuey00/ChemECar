@@ -1,0 +1,9 @@
+Calibration,1,16h31m56s," "," "
+"Time, s",Light,Threshold,,
+Set 0,16h31m56s,"Conc. KIO3, M","Conc. NAHSO4, M"," "
+Trial,"Time, s",,,
+1,0.001,,,
+2,0.0,,,
+3,0.0,,,
+4,0.0,,,
+5,0.0,,,
