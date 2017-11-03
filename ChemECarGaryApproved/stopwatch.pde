@@ -13,8 +13,7 @@ public class StopWatch
   
   private float stopTime = -1;
   
-  public StopWatch() 
-  {
+  public StopWatch() {
     super();
   }
   

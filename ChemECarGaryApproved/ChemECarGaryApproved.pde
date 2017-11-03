@@ -1,4 +1,3 @@
-
 import processing.serial.*;
 
 Serial myPort;
@@ -35,7 +34,6 @@ Indicator time = new Indicator("Time:", 20, 80);
 Indicator light = new Indicator("Light", 20, 120);
 Button calibrate = new Button("Calibrate", 20, 160);
 Button newSet = new Button("New Set", 20, 200);
-
 Button stop = new Button("Stop", 20, 240);
 Indicator set = new Indicator("Set:", 20, 300);
 Indicator trial = new Indicator("Trial:", 20, 340);
@@ -46,7 +44,7 @@ void setup()
 {
   size(500, 500);
   timeStamp = getTimeStamp();
-  
+
   table = new Table();
 
   //attempt to connect to Arduino through serial port
@@ -67,7 +65,7 @@ void draw()
 {
   update();
   background(0);
-      
+
   status.draw();
   time.draw();
   light.draw();
@@ -88,27 +86,25 @@ void update()
   set.value = str(setCount);
   trial.value = str(trialCount);
   thresh.value = str(threshold);
-  
-  if(forceTest == false) {
+
+  if (forceTest == false) {
     force.value = "Off";
-  }
-  else {
+  } else {
     force.value = "On";
   }
-  
-  if(sensorData == -50 && !forceTest) { //new trial // deleted checkforcetest
-      forceTest = true;
-  }
-  else
+
+  if (sensorData == -50 && !forceTest) { //new trial // deleted checkforcetest
+    forceTest = true;
+  } else
   {
     forceTest = false;
   }
-  
-  if(finishCal && forceTest && !started) { //deleted !checkforcetest condition added force test
+
+  if (finishCal && forceTest && !started) { //deleted !checkforcetest condition added force test
     started = true;
   }
-   
-  if(started){ // deleted stopp
+
+  if (started) { // deleted stopp
     delay(500);
     mode = 't';
     println("trial");
@@ -121,7 +117,7 @@ void update()
     started = false;  //changed to true                WARNING CHANGED
     //stopped = false;
   }
-   
+
   if (stop.isMouseClicked())
   {
     stopped = true;
@@ -137,7 +133,7 @@ void update()
       table.setFloat(rowCount, 1, timer.getTime());
       trialCount++;
       rowCount++;
-      
+
       saveTable(table, "data/" + timeStamp + ".csv"); //save excel sheet upon stop
     }
     mode = 's'; //mode s is stop
@@ -145,21 +141,17 @@ void update()
     myPort.write('c');
     timer.reset();
     saveTable(table, "data/" + timeStamp + ".csv");  //save excel sheet
-    
-  }
-  else if (calibrate.isMouseClicked())
+  } else if (calibrate.isMouseClicked())
   {
     checkForceTest = true;
-    
-  }
-  else if (newSet.isMouseClicked())
+  } else if (newSet.isMouseClicked())
   {
     initTrial = false;
     setCount++;
     trialCount = 1;
   }
-  
-  if(checkForceTest && forceTest) {
+
+  if (checkForceTest && forceTest) {
     initCal = false;
     mode = 'c';  //callibration mode
     rowCount = 0;
@@ -169,18 +161,17 @@ void update()
     checkForceTest = false;
     finishCal = false;
     println("calibrated");
-    
   }
-  
+
   switch (mode)
   {
-    case 't':
-      trial(); //trial function is made in functions tab
-      break;
-      
-    case 'c':
-      calibrate(); //calibration function made in functions tab
-      break;
+  case 't':
+    trial(); //trial function is made in functions tab
+    break;
+
+  case 'c':
+    calibrate(); //calibration function made in functions tab
+    break;
   }
 }
 
@@ -198,5 +189,5 @@ void serialEvent(Serial myPort)
 
 void mouseClicked()
 {
-  mouseClicked = true; 
+  mouseClicked = true;
 }
