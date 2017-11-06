@@ -32,6 +32,9 @@ int colCount = -5;
 int calCount = 0; //Calibration is set to 0 AKA no calibration is done
 int trialCount = 1; //trial is setup as trial #1 upon open
 int setCount = 0; //Upon open 0 sets
+int rowCounter2 = 1;
+int colCounter2 = 10;
+
 
 StopWatch timer = new StopWatch();
 
@@ -43,6 +46,7 @@ Button calibrateUser = new Button("Input Cal", 150, 160);
 Button newSet = new Button("New Set", 20, 200);
 
 Button stop = new Button("Stop", 20, 240);
+Button delete = new Button("Delete", 150, 240);
 Indicator set = new Indicator("Set:", 20, 300);
 Indicator trial = new Indicator("Trial: ", 20, 340);
 Indicator thresh = new Indicator("Threshold: ", 20, 380);
@@ -84,6 +88,7 @@ void draw()
   trial.draw();
   thresh.draw();
   force.draw();
+  delete.draw();
 }
 
 void update()
@@ -93,7 +98,7 @@ void update()
   light.value = str(sensorData);
   set.value = str(setCount);
   trial.value = str(trialCount);
-  thresh.value = str(threshold);
+  thresh.value = str(threshold);  
   
   if(forceTest == false) {
     force.value = "Off";
@@ -131,20 +136,27 @@ void update()
    
   if (stop.isMouseClicked())
   {
+    if (clickingKeys){
+      threshold = int(userThresh);
+      userThresh = "";
+    }
     stopped = true;
     started = false;
     finishCal = true;
     forceTest = false;
+    clickingKeys=false;
     timer.stop();
     calibrate.clicked = false;
     calibrateUser.clicked = false;
     if (mode == 't')
     {
       timer.stop();
-      table.setInt(rowCount, 0, trialCount);
-      table.setFloat(rowCount, 1, timer.getTime());
+      //table.setInt(rowCount, 0, trialCount);
+      //table.setFloat(rowCount, 1, timer.getTime());
       trialCount++;
       rowCount++;
+      colCounter2+=3;
+      rowCounter2 = 1;
       
       saveTable(table, "data/" + timeStamp + ".csv"); //save excel sheet upon stop
     }
@@ -167,9 +179,20 @@ void update()
   } 
   else if (calibrateUser.isMouseClicked()){
     clickingKeys = true;
-    println("_______________________________this ");
+    println("_______________________________this");
     
   }
+  else if (delete.isMouseClicked()){
+    //table = new Table();
+    //trialCount = 1;
+    //setCount = 0;
+    //rowCount = 0;
+    //colCount = -5;
+    table.setString(rowCount,3,"VOID");
+    println("deleated");
+    rowCounter2++;
+  }
+  
  
   if(checkForceTest && forceTest) {
     initCal = false;
@@ -214,6 +237,9 @@ void mouseClicked()
 }
 
 void keyPressed(){
+  //if(keyCode==BACKSPACE){
+  //    userThresh = userThresh.substring(0,userThresh.length()-1);
+  //  }
   if (clickingKeys == true){
     userThresh += key;
     println (userThresh);

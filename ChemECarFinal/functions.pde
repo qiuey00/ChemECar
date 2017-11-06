@@ -86,11 +86,10 @@ void calibrate()
   }
   else
   {
-    
     table.setFloat(rowCount, colCount, timer.getTime());
     table.setInt(rowCount, colCount + 1, sensorData);
     table.setInt(rowCount, colCount + 2, (startData + sensorData)/2);
-    //threshold = (startData + sensorData)/2;
+    //threshold= (startData + sensorData)/2;
     if (clickingKeys == true){
       threshold = int(userThresh);
       clickingKeys = false;
@@ -135,12 +134,12 @@ void trial()
     
     initTrial = true;
   }
-  
+    
   else
   {
     if (sensorData <= threshold && timer.runningState == 1)
     {
-      
+      println("CALLED");
       timer.stop();
       table.setInt(rowCount, 0, trialCount);
       table.setFloat(rowCount, 1, timer.getTime());
@@ -150,5 +149,18 @@ void trial()
       pastTimes = pastTimes2;
       printArray(pastTimes);
      } 
-  }  
+  }
+  if (initTrial){
+    if(table.getColumnCount() < colCounter2 + 1){
+      for (int i = table.getColumnCount(); i <= colCounter2+1; i++){
+        table.addColumn();
+      }
+    }
+    table.setString(0,colCounter2,"Time");
+    table.setString(0,colCounter2+1,"ThreshHold");
+    table.setFloat(rowCounter2, colCounter2, timer.getTime());
+    table.setInt(rowCounter2, colCounter2 + 1, sensorData);
+    rowCounter2++;
+    delay(10);
+  }
 }
